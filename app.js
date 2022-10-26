@@ -37,19 +37,18 @@ const ItemCtrl = (function(){
 
       // Create ID
       let ID;
+
       if(data.items.length > 0){
-        ID = data.items[data.items.length-1].id + 1;
+        ID = data.items[data.items.length - 1].id + 1;
       }else{
         ID = 0;
       }
 
       // Create new item
-      let newItem = new Item(ID, name, calories);
+      newItem = new Item(ID, name, calories);
 
       // Add to items array
       data.items.push(newItem);
-
-      console.log("Item added successfully");
 
       return newItem;
 
@@ -99,8 +98,8 @@ const UICtrl = (function(){
 
     getInputItem: function(){
       return{
-          name: document.querySelector(itemNameInput).value,
-          calories: document.querySelector(itemCaloriesInput).value
+          name: document.querySelector(UISelectors.itemNameInput).value,
+          calories: document.querySelector(UISelectors.itemCaloriesInput).value
       }
     },
     getSelectors: function(){
