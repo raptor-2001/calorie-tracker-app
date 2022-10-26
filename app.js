@@ -1,3 +1,5 @@
+// https://github.com/atom888/tracalorie
+
 // Storage Controller
 
 // Item Controller
@@ -16,9 +18,9 @@ const ItemCtrl = (function(){
   // Data Structure / State
   const data = {
     items: [
-      {id: 0, name: 'Steak Dinner', calories: 1200},
-      {id: 1, name: 'Cookie', calories: 500},
-      {id: 2, name: 'Eggs', calories: 300},
+      // {id: 0, name: 'Steak Dinner', calories: 1200},
+      // {id: 1, name: 'Cookie', calories: 500},
+      // {id: 2, name: 'Eggs', calories: 300},
     ],
     currentItem: null,
     totalCalories: 0,
@@ -102,6 +104,37 @@ const UICtrl = (function(){
           calories: document.querySelector(UISelectors.itemCaloriesInput).value
       }
     },
+
+    addListItem: function(item){
+
+      // Show the list
+      document.querySelector(UISelectors.itemList).style.display = 'block';
+      // Create li element
+      const li = document.createElement('li');
+      // Add class
+      li.className = 'collection-item'
+      // Add ID
+      li.id = `item-${item.id}`;
+      // Add HTML
+      li.innerHTML = `
+        <strong>${item.name} : </strong> <em>${item.calories} Calories</em>
+        <a href="#" class="secondary-content">
+          <i class="edit-item fa fa-pencil"></i>
+        </a>
+      `;
+
+      // insert item
+      document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend',li);
+
+
+    },
+    clearInput: function(){
+      document.querySelector(UISelectors.itemNameInput).value = '';
+      document.querySelector(UISelectors.itemCaloriesInput).value = '';
+    },
+    hideList: function(){
+      document.querySelector(UISelectors.itemList).style.display = 'none';
+    },
     getSelectors: function(){
       return UISelectors;
     }
@@ -136,7 +169,11 @@ const App = (function(ItemCtrl, UICtrl){
       // Add item 
       const newItem = ItemCtrl.addItem(input.name,input.calories);
 
+      // Add item to UI
+      UICtrl.addListItem(newItem);
 
+      // Clear Fields
+      UICtrl.clearInput();
     }
 
     
@@ -152,8 +189,14 @@ const App = (function(ItemCtrl, UICtrl){
       // Fetch items from ItemCtrl
       const items = ItemCtrl.getItems();
 
-      // Populate list with items
-      UICtrl.populateItemList(items);
+      // Check if any items
+      if(items.length === 0){
+        UICtrl.hideList();
+      }else{
+        // Populate list with items
+        UICtrl.populateItemList(items);
+      }
+      
 
       // Load event listeners
       loadEventListeners();
